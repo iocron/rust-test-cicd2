@@ -21,30 +21,37 @@ jobs:
         # os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-        with: 
-          path: master
+      # - name: Checkout Repository
+      #   uses: actions/checkout@v3
+        # with: 
+        #   path: master
+
+      - uses: actions/checkout@v2
       - name: Set Up Rust
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: stable 
-      - name: Install Dependencies
-        run: |
-          # Add any dependency installations you need here
-          # Example (for Ubuntu): sudo apt update && sudo apt-get install -y build-essential
-          # Example (for Windows): choco install -y visualstudio2019buildtools
+          toolchain: stable
+      
+      # - name: Install Dependencies
+      #   run: |
+      #     # Add any dependency installations you need here
+      #     # Example (for Ubuntu): sudo apt update && sudo apt-get install -y build-essential
+      #     # Example (for Windows): choco install -y visualstudio2019buildtools
+
       - name: Cross Compile for Linux
         if: startsWith(matrix.os, 'ubuntu')
         run: cargo build --release --target x86_64-unknown-linux-gnu
+
       - name: Cross Compile for macOS
         if: startsWith(matrix.os, 'macos')
         run: cargo build --release --target x86_64-apple-darwin
+
       - name: Cross Compile for Windows
         if: startsWith(matrix.os, 'windows')
         run: cargo build --release --target x86_64-pc-windows-gnu
         # You may also want to generate a standalone executable:
         # run: cargo build --release --target x86_64-pc-windows-gnu --features standalone
+
       - name: Archive Builds
         run: |
           mkdir artifacts
@@ -62,12 +69,14 @@ jobs:
             exit 1 
           fi
         shell: bash
+
       - name: Upload Builds
         uses: actions/upload-artifact@v3
         with:
           name: cross-compiled-builds
           path: artifacts/*
           if-no-files-found: error
+
   release:
     runs-on: ubuntu-latest
     needs: [build]
