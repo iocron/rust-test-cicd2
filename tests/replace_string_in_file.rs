@@ -2,11 +2,12 @@ use std::process::Command;
 use std::fs;
 use std::time::Duration;
 use std::thread::sleep;
-// use serial_test::*;
+use serial_test::*;
 
-fn create_test_files(delay: u64) {
+fn create_test_files() {
     // Using a delay against parallel file_locks/writes
-    sleep(Duration::from_millis(delay));
+    // => (the combination of sleep+serial_test works)
+    sleep(Duration::from_millis(100));
 
     let files = [
         "./tests/example_files/test1.txt", 
@@ -27,8 +28,9 @@ fn create_test_files(delay: u64) {
 }
 
 #[test]
+#[serial]
 fn check_if_replace_string_works_in_single_file() {
-    create_test_files(100);
+    create_test_files();
 
     Command::new("cargo")
         .arg("run")
@@ -40,8 +42,9 @@ fn check_if_replace_string_works_in_single_file() {
 }
 
 #[test]
+#[serial]
 fn check_if_replace_string_works_in_files_recursive() {
-    create_test_files(200);
+    create_test_files();
 
     Command::new("cargo")
         .arg("run")
