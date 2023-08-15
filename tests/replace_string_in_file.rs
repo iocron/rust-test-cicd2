@@ -5,8 +5,8 @@ use std::thread::sleep;
 use serial_test::*;
 
 fn create_test_files() {
-    // Using a delay against parallel file_locks/writes
-    // => (the combination of sleep+serial_test works)
+    // Using a delay against parallel file_locks/parallel writes/race-conditions
+    // => (the combination of sleep+serial_test works against file_locks/parallel writes/race conditions)
     sleep(Duration::from_millis(100));
 
     let files = [
