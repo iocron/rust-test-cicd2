@@ -2,8 +2,12 @@ use std::process::Command;
 use std::fs;
 use std::time::Duration;
 use std::thread::sleep;
+// use serial_test::*;
 
-fn create_test_files() {
+fn create_test_files(delay: u64) {
+    // Using a delay against parallel file_locks/writes
+    sleep(Duration::from_millis(delay));
+
     let files = [
         "./tests/example_files/test1.txt", 
         "./tests/example_files/test2.txt",
@@ -11,9 +15,10 @@ fn create_test_files() {
         "./tests/example_files/folder2/folder2inner/test4.txt" 
     ];
 
-    for file in files {
-        fs::remove_file(file).ok();
-    }
+    // for file in files {
+    //     // Remove file (if exists), not really needed, because fs::write overwrites by default
+    //     fs::remove_file(file).ok();
+    // }
 
     fs::write(files[0], "UTI\nREPLACE_PENDINGabc\neorwpREPLACE_PENDINGei\nii").expect("File ./tests/test1.txt should have been created.");
     fs::write(files[1], "456").expect("File ./tests/test2.txt should have been created.");
@@ -23,8 +28,7 @@ fn create_test_files() {
 
 #[test]
 fn check_if_replace_string_works_in_single_file() {
-    sleep(Duration::from_millis(100)); 
-    create_test_files();
+    create_test_files(100);
 
     Command::new("cargo")
         .arg("run")
@@ -37,8 +41,7 @@ fn check_if_replace_string_works_in_single_file() {
 
 #[test]
 fn check_if_replace_string_works_in_files_recursive() {
-    sleep(Duration::from_millis(200));
-    create_test_files();
+    create_test_files(200);
 
     Command::new("cargo")
         .arg("run")

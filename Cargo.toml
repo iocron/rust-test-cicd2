@@ -9,6 +9,10 @@ edition = "2021"
 clap = { version = "4.3.19", features = ["derive"] }
 glob = "0.3.1"
 
+# [dev-dependencies]
+# serial_test = "*"
+# serial_test_derive = "*"
+
 [profile.release]
 # opt-level = 'z'     # Optimize for size
 lto = true            # Enable link-time optimization
