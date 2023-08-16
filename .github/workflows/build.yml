@@ -46,23 +46,26 @@ jobs:
       - name: Run Tests
         run: cargo test
 
+      - name: Install Crossbuild Tool
+        run: cargo install cross
+
       - name: Cross Compile for Linux
         if: startsWith(matrix.os, 'ubuntu')
         run: |
-          cargo build --release --target x86_64-unknown-linux-gnu
-          cargo build --release --target aarch64-unknown-linux-gnu # TODO: NOT WORKING
+          cross build --release --target x86_64-unknown-linux-gnu
+          cross build --release --target aarch64-unknown-linux-gnu # TODO: NOT WORKING
 
       - name: Cross Compile for macOS
         if: startsWith(matrix.os, 'macos')
         run: | 
-          cargo build --release --target x86_64-apple-darwin
-          cargo build --release --target aarch64-apple-darwin # TODO: NOT WORKING
+          cross build --release --target x86_64-apple-darwin
+          cross build --release --target aarch64-apple-darwin # TODO: NOT WORKING
 
       - name: Cross Compile for Windows
         if: startsWith(matrix.os, 'windows')
         run: |
-          cargo build --release --target x86_64-pc-windows-gnu
-          cargo build --release --target aarch64-pc-windows-msvc # TODO: MAYBE WORKING?
+          cross build --release --target x86_64-pc-windows-gnu
+          cross build --release --target aarch64-pc-windows-msvc # TODO: MAYBE WORKING?
         # You may also want to generate a standalone executable:
         # run: cargo build --release --target x86_64-pc-windows-gnu --features standalone
 
