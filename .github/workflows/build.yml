@@ -1,10 +1,6 @@
-# We could use `@actions-rs/cargo` Action ability to automatically install `cross` tool
-# in order to compile our application for some unusual targets.
-
-# on: [push, pull_request]
-
 name: Cross Compile Rust Application
 
+# on: [push, pull_request]
 on:
   push:
     tags:
@@ -17,7 +13,7 @@ jobs:
   build:
     strategy:
       matrix:
-        # os: [ubuntu-latest]
+        # os: [ubuntu-latest, windows-latest, macos-latest]
         job: 
           - { target: x86_64-unknown-linux-musl, exe: amd64-linux, os: ubuntu-latest }
           - { target: aarch64-unknown-linux-musl, exe: aarch64-linux, os: ubuntu-latest }
@@ -25,15 +21,11 @@ jobs:
           - { target: x86_64-apple-darwin, exe: macos, os: macos-latest }
           - { target: x86_64-pc-windows-msvc, exe: windows.exe, os: windows-2019 }
           # - { target: wasm32-wasi, exe: wasi.wasm, os: ubuntu-latest }
-        # os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.job.os }}
     steps:
-      # - name: Checkout Repository
-      #   uses: actions/checkout@v3
-        # with: 
-        #   path: master
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-      - uses: actions/checkout@v2
       - name: Set Up Rust
         uses: actions-rs/toolchain@v1
         with:
@@ -42,17 +34,6 @@ jobs:
           target: ${{ matrix.job.target }}
           override: true
           components: rust-src # necessary for wasi, because there isn't a cross image for it
-
-      # - name: Install Toolchains
-      #   run: |
-      #     rustup install stable
-      #     rustup default stable     
-
-      # - name: Install Dependencies
-      #   run: |
-      #     # Add any dependency installations you need here
-      #     # Example (for Ubuntu): sudo apt update && sudo apt-get install -y build-essential
-      #     # Example (for Windows): choco install -y visualstudio2019buildtools
 
       - name: Run Tests
         run: cargo test
@@ -68,22 +49,8 @@ jobs:
       #   if: startsWith(matrix.os, 'ubuntu')
       #   run: |
       #     cross build --release --target x86_64-unknown-linux-gnu
-      #     cross build --release --target aarch64-unknown-linux-gnu # TODO: NOT WORKING
-
-      # - name: Cross Compile for macOS
-      #   if: startsWith(matrix.os, 'macos')
-      #   run: | 
-      #     cross build --release --target x86_64-apple-darwin
-      #     cross build --release --target aarch64-apple-darwin # TODO: NOT WORKING
-
-      # - name: Cross Compile for Windows
-      #   if: startsWith(matrix.os, 'windows')
-      #   run: |
-      #     cross build --release --target x86_64-pc-windows-gnu
-      #     cross build --release --target aarch64-pc-windows-msvc # TODO: MAYBE WORKING?
-
-        # You may also want to generate a standalone executable:
-        # run: cargo build --release --target x86_64-pc-windows-gnu --features standalone
+            # You may also want to generate a standalone executable:
+            # run: cargo build --release --target x86_64-pc-windows-gnu --features standalone
 
       # - name: Run cargo check
       #   uses: actions-rs/cargo@v1
@@ -98,25 +65,7 @@ jobs:
           APP_NAME_SUFFIX="$(if [[ "$RUNNER_OS_LC" == "windows" ]]; then echo '.exe'; fi)"
           
           mkdir artifacts
-
           cp "target/${{ matrix.job.target }}/release/${APP_NAME}${APP_NAME_SUFFIX}" "artifacts/$APP_NAME-${{ matrix.job.exe }}"
-
-          # if [[ "$RUNNER_OS_LC" == "linux" ]]; then 
-          #   cp "target/x86_64-unknown-linux-gnu/release/$APP_NAME" "artifacts/$APP_NAME-$RUNNER_OS_LC-x64"
-          #   # cp "target/aarch64-unknown-linux-gnu/release/$APP_NAME" "artifacts/$APP_NAME-$RUNNER_OS_LC-arm64"
-          #   echo "ubuntu artifacts copied successfully."
-          # elif [[ "$RUNNER_OS_LC" == "macos" ]]; then 
-          #   cp "target/x86_64-apple-darwin/release/$APP_NAME" "artifacts/$APP_NAME-$RUNNER_OS_LC-x64"
-          #   # cp "target/aarch64-apple-darwin/release/$APP_NAME" "artifacts/$APP_NAME-$RUNNER_OS_LC-arm64"
-          #   echo "osx artifacts copied successfully."
-          # elif [[ "$RUNNER_OS_LC" == "windows" ]]; then 
-          #   cp "target/x86_64-pc-windows-gnu/release/$APP_NAME.exe" "artifacts/$APP_NAME-$RUNNER_OS_LC-x64.exe"
-          #   # cp "target/aarch64-pc-windows-msvc/release/$APP_NAME.exe" "artifacts/$APP_NAME-$RUNNER_OS_LC-arm64.exe"
-          #   echo "windows artifacts copied successfully."
-          # else 
-          #   echo "ERROR: $RUNNER_OS_LC not supported"
-          #   exit 1 
-          # fi
         shell: bash
 
       - name: Upload Builds
