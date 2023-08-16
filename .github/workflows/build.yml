@@ -45,14 +45,14 @@ jobs:
       # - name: Run Crossbuild
         # run: cross build --release --locked --target=${{ matrix.job.target }}
 
-      - name: Setup Rust Dependencies
-        run: |
-          # rustup self update
-          # rustup toolchain install stable-${{ matrix.job.target }}
-          # rustup target add stable-${{ matrix.job.target }}
+      # - name: Setup Rust Dependencies
+      #   run: |
+      #     # rustup self update
+      #     # rustup toolchain install stable-${{ matrix.job.target }}
+      #     # rustup target add stable-${{ matrix.job.target }}
 
-          rustup target add --toolchain stable ${{ matrix.job.target }}
-          rustup toolchain install --force-non-host stable
+      #     rustup target add --toolchain stable ${{ matrix.job.target }}
+      #     rustup toolchain install --force-non-host stable
 
       - name: Build Rust Binaries
         run: cargo build --release --locked --target=${{ matrix.job.target }}
