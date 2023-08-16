@@ -62,18 +62,23 @@ jobs:
 
       - name: Archive Builds
         run: |
+          RUNNER_OS_LC="echo "$RUNNER_OS" | tr '[:upper:]' '[:lower:]'"
+          RUNNER_ARCH_LC="$(echo "$RUNNER_ARCH" | tr '[:upper:]' '[:lower:]')"
+          APP_NAME="rust-string-replacer"
+
           mkdir artifacts
-          if [[ "$RUNNER_OS" == "Linux" ]]; then 
-            cp target/x86_64-unknown-linux-gnu/release/rust-string-replacer artifacts/rust-string-replacer-linux
+
+          if [[ "$RUNNER_OS_LC" == "linux" ]]; then 
+            cp "target/x86_64-unknown-linux-gnu/release/$APP_NAME" "artifacts/$APP_NAME-$RUNNER_OS_LC-$RUNNER_ARCH_LC"
             echo "ubuntu artifact copied successfully."
-          elif [[ "$RUNNER_OS" == "macOS" ]]; then 
-            cp target/x86_64-apple-darwin/release/rust-string-replacer artifacts/rust-string-replacer-osx
+          elif [[ "$RUNNER_OS_LC" == "macos" ]]; then 
+            cp "target/x86_64-apple-darwin/release/$APP_NAME" "artifacts/$APP_NAME-$RUNNER_OS_LC-$RUNNER_ARCH_LC"
             echo "osx artifact copied successfully."
-          elif [[ "$RUNNER_OS" == "Windows" ]]; then 
-            cp target/x86_64-pc-windows-gnu/release/rust-string-replacer.exe artifacts/rust-string-replacer.exe
+          elif [[ "$RUNNER_OS_LC" == "windows" ]]; then 
+            cp "target/x86_64-pc-windows-gnu/release/$APP_NAME.exe" "artifacts/$APP_NAME-$RUNNER_OS_LC.exe"
             echo "windows artifact copied successfully."
           else 
-            echo "ERROR: $RUNNER_OS not supported"
+            echo "ERROR: $RUNNER_OS_LC not supported"
             exit 1 
           fi
         shell: bash
