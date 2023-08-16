@@ -43,15 +43,21 @@ jobs:
 
       - name: Cross Compile for Linux
         if: startsWith(matrix.os, 'ubuntu')
-        run: cargo build --release --target x86_64-unknown-linux-gnu
+        run: |
+          cargo build --release --target x86_64-unknown-linux-gnu
+          cargo build --release --target aarch64-unknown-linux-gnu
 
       - name: Cross Compile for macOS
         if: startsWith(matrix.os, 'macos')
-        run: cargo build --release --target x86_64-apple-darwin
+        run: | 
+          cargo build --release --target x86_64-apple-darwin
+          cargo build --release --target aarch64-apple-darwin
 
       - name: Cross Compile for Windows
         if: startsWith(matrix.os, 'windows')
-        run: cargo build --release --target x86_64-pc-windows-gnu
+        run: |
+          cargo build --release --target x86_64-pc-windows-gnu
+          cargo build --release --target aarch64-pc-windows-msvc
         # You may also want to generate a standalone executable:
         # run: cargo build --release --target x86_64-pc-windows-gnu --features standalone
 
@@ -69,14 +75,17 @@ jobs:
           mkdir artifacts
 
           if [[ "$RUNNER_OS_LC" == "linux" ]]; then 
-            cp "target/x86_64-unknown-linux-gnu/release/$APP_NAME" "artifacts/$APP_NAME-$RUNNER_OS_LC-$RUNNER_ARCH_LC"
-            echo "ubuntu artifact copied successfully."
+            cp "target/x86_64-unknown-linux-gnu/release/$APP_NAME" "artifacts/$APP_NAME-$RUNNER_OS_LC-x64"
+            cp "target/aarch64-unknown-linux-gnu/release/$APP_NAME" "artifacts/$APP_NAME-$RUNNER_OS_LC-arm64"
+            echo "ubuntu artifacts copied successfully."
           elif [[ "$RUNNER_OS_LC" == "macos" ]]; then 
-            cp "target/x86_64-apple-darwin/release/$APP_NAME" "artifacts/$APP_NAME-$RUNNER_OS_LC-$RUNNER_ARCH_LC"
-            echo "osx artifact copied successfully."
+            cp "target/x86_64-apple-darwin/release/$APP_NAME" "artifacts/$APP_NAME-$RUNNER_OS_LC-x64"
+            cp "target/aarch64-apple-darwin/release/$APP_NAME" "artifacts/$APP_NAME-$RUNNER_OS_LC-arm64"
+            echo "osx artifacts copied successfully."
           elif [[ "$RUNNER_OS_LC" == "windows" ]]; then 
-            cp "target/x86_64-pc-windows-gnu/release/$APP_NAME.exe" "artifacts/$APP_NAME-$RUNNER_OS_LC.exe"
-            echo "windows artifact copied successfully."
+            cp "target/x86_64-pc-windows-gnu/release/$APP_NAME.exe" "artifacts/$APP_NAME-$RUNNER_OS_LC-x64.exe"
+            cp "target/aarch64-pc-windows-msvc/release/$APP_NAME.exe" "artifacts/$APP_NAME-$RUNNER_OS_LC-arm64.exe"
+            echo "windows artifacts copied successfully."
           else 
             echo "ERROR: $RUNNER_OS_LC not supported"
             exit 1 
