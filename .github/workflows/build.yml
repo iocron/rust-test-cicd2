@@ -16,10 +16,10 @@ jobs:
         # os: [ubuntu-latest, windows-latest, macos-latest]
         job: 
           # GitHub Actions Runner Images: https://github.com/actions/runner-images
-          - { target: x86_64-unknown-linux-musl, exe: amd64-linux, os: ubuntu-latest }
-          - { target: aarch64-unknown-linux-musl, exe: aarch64-linux, os: ubuntu-latest }
-          - { target: armv7-unknown-linux-musleabi, exe: armv7-linux, os: ubuntu-latest }
-          - { target: x86_64-pc-windows-msvc, exe: windows.exe, os: windows-latest }
+          # - { target: x86_64-unknown-linux-musl, exe: amd64-linux, os: ubuntu-latest }
+          # - { target: aarch64-unknown-linux-musl, exe: aarch64-linux, os: ubuntu-latest }
+          # - { target: armv7-unknown-linux-musleabi, exe: armv7-linux, os: ubuntu-latest }
+          # - { target: x86_64-pc-windows-msvc, exe: windows.exe, os: windows-latest }
           - { target: x86_64-apple-darwin, exe: amd64-macos, os: macos-latest }
           # - { target: aarch64-apple-darwin, exe: aarch64-macos, os: macos-latest } # TODO: Not working
           # - { target: wasm32-wasi, exe: wasi.wasm, os: ubuntu-latest }
@@ -28,7 +28,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      # Github Action Images already contains rust, rustup, ..
+      # Github Action Images already contain rust, rustup, ..
       # - name: Setup Rust / Rustup
       #   run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
       #   shell: bash
@@ -44,9 +44,10 @@ jobs:
 
       - name: Setup Rust Dependencies
         run: |
-          rustup self update
+          # rustup self update
           # rustup toolchain install stable-${{ matrix.job.target }}
           # rustup target add stable-${{ matrix.job.target }}
+
           rustup target add --toolchain stable ${{ matrix.job.target }}
 
       - name: Build Rust Binaries
