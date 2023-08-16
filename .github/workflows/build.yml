@@ -24,18 +24,10 @@ jobs:
     runs-on: ${{ matrix.job.os }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Rust / Rustup
-        run: |
-          curl --proto '=https' https://sh.rustup.rs -sSf | sh -s -- -y
-        # uses: actions-rs/toolchain@v1
-        # with:
-        #   profile: minimal
-        #   toolchain: stable
-        #   target: ${{ matrix.job.target }}
-        #   override: true
-        #   components: rust-src # necessary for wasi, because there isn't a cross image for it
+        run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
         shell: bash
 
       - name: Run Tests
