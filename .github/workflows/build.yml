@@ -35,11 +35,14 @@ jobs:
       - name: Run Tests
         run: cargo test
 
-      - name: Install Crossbuild
-        run: cargo install cross
+      # - name: Install Crossbuild
+        # run: cargo install cross
 
-      - name: Run Crossbuild
-        run: cross build --release --locked --target=${{ matrix.job.target }}
+      # - name: Run Crossbuild
+        # run: cross build --release --locked --target=${{ matrix.job.target }}
+
+      - name: Build Binary
+        run: cargo build --release --locked --target=${{ matrix.job.target }}
 
       # - name: Cross Compile for Linux
       #   if: startsWith(matrix.os, 'ubuntu')
