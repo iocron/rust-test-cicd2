@@ -57,8 +57,7 @@ jobs:
       - name: Aarch64 Linux Workaround
         if: ${{ matrix.job.target }} == "aarch64-unknown-linux-musl"
         run: | 
-          export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER=aarch64-linux-gnu-gcc
-          export CC=aarch64-linux-gnu-gcc
+          rustup target add --toolchain stable aarch64-linux-gnu-gcc
 
       - name: Build Rust Binaries
         run: cargo build --release --locked --target=${{ matrix.job.target }}
