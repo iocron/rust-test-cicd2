@@ -19,8 +19,8 @@ jobs:
           - { target: aarch64-unknown-linux-musl, exe: aarch64-linux, os: ubuntu-latest }
           - { target: armv7-unknown-linux-musleabi, exe: armv7-linux, os: ubuntu-latest }
           - { target: x86_64-pc-windows-msvc, exe: windows.exe, os: windows-2019 }
-          - { target: x86_64-apple-darwin, exe: amd64-macos, os: macos-12 }
-          - { target: aarch64-apple-darwin, exe: aarch64-macos, os: macos-13 } # change to macos-latest when released as v13+
+          - { target: x86_64-apple-darwin, exe: amd64-macos, os: macos-latest }
+          # - { target: aarch64-apple-darwin, exe: aarch64-macos, os: macos-latest } # TODO: Not working
           # - { target: wasm32-wasi, exe: wasi.wasm, os: ubuntu-latest }
     runs-on: ${{ matrix.job.os }}
     steps:
