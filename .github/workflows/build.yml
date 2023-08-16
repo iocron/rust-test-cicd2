@@ -26,24 +26,26 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Set Up Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-          target: ${{ matrix.job.target }}
-          override: true
-          components: rust-src # necessary for wasi, because there isn't a cross image for it
+      - name: Setup Rust / Rustup
+        run: |
+          curl --proto '=https' --tlsv1.3 https://sh.rustup.rs -sSf | sh
+        # uses: actions-rs/toolchain@v1
+        # with:
+        #   profile: minimal
+        #   toolchain: stable
+        #   target: ${{ matrix.job.target }}
+        #   override: true
+        #   components: rust-src # necessary for wasi, because there isn't a cross image for it
+        shell: bash
 
       - name: Run Tests
         run: cargo test
 
-      - name: Install Crossbuild Tool
+      - name: Install Crossbuild
         run: cargo install cross
 
-      - name: Cross Compilation
-        run: |
-          cross build --release --locked --target=${{ matrix.job.target }}
+      - name: Run Crossbuild
+        run: cross build --release --locked --target=${{ matrix.job.target }}
 
       # - name: Cross Compile for Linux
       #   if: startsWith(matrix.os, 'ubuntu')
