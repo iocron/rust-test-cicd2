@@ -41,7 +41,10 @@ jobs:
       # - name: Run Crossbuild
         # run: cross build --release --locked --target=${{ matrix.job.target }}
 
-      - name: Build Binary
+      - name: Setup Rust Dependencies
+        run: rustup target add ${{ matrix.job.target }}
+
+      - name: Build Rust Binaries
         run: cargo build --release --locked --target=${{ matrix.job.target }}
 
       # - name: Cross Compile for Linux
