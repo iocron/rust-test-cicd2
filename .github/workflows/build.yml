@@ -42,7 +42,10 @@ jobs:
         # run: cross build --release --locked --target=${{ matrix.job.target }}
 
       - name: Setup Rust Dependencies
-        run: rustup target add ${{ matrix.job.target }}
+        run: |
+          rustup toolchain install stable-${{ matrix.job.target }}
+          rustup target add ${{ matrix.job.target }}
+          rustup self update
 
       - name: Build Rust Binaries
         run: cargo build --release --locked --target=${{ matrix.job.target }}
