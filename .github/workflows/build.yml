@@ -62,9 +62,9 @@ jobs:
 
       - name: Archive Builds
         run: |
-          RUNNER_OS_LC="${RUNNER_OS,,}"
-          RUNNER_ARCH_LC="${RUNNER_ARCH,,}"
           APP_NAME="rust-string-replacer"
+          RUNNER_OS_LC="$(echo "$RUNNER_OS" | perl -ne 'print lc')"
+          RUNNER_ARCH_LC="$(echo "$RUNNER_ARCH" | perl -ne 'print lc')"
 
           mkdir artifacts
 
