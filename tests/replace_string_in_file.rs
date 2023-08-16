@@ -1,13 +1,13 @@
 use std::process::Command;
 use std::fs;
-use std::time::Duration;
-use std::thread::sleep;
+// use std::time::Duration;
+// use std::thread::sleep;
 use serial_test::*;
 
 fn create_test_files() {
     // Using delay+#[serial] against file_locks/writes/race-conditions
     // => (the combination of sleep+serial_test works against those problems)
-    sleep(Duration::from_millis(100));
+    // sleep(Duration::from_millis(100)); // Replaced by Command::new()...wait() in test functions
 
     let files = [
         "./tests/example_files/test1.txt", 
@@ -49,12 +49,10 @@ fn check_if_replace_string_works_in_single_file() {
         .arg("REPLACE_PENDING")
         .arg("REPLACE_FINISHED")
         .arg("./tests/example_files/test1.txt")
-        .spawn()
-        .expect("cargo run failed to spawn.")
-        .wait()
-        .expect("failed to wait for command");
+        .spawn().unwrap()
+        .wait().unwrap();
 
-    let file_content = fs::read_to_string("./tests/example_files/test1.txt").expect("Expect file test1.txt to read.");
+    let file_content = fs::read_to_string("./tests/example_files/test1.txt").unwrap();
     let occurrences = count_occurrences(&file_content, "REPLACE_FINISHED");
 
     // The replaced text should have been applied exactly 2 times in test1.txt 
@@ -71,8 +69,6 @@ fn check_if_replace_string_works_in_files_recursive() {
         .arg("REPLACE_PENDING")
         .arg("REPLACE_FINISHED")
         .arg("./tests/example_files/**/*.txt")
-        .spawn()
-        .expect("cargo run failed to spawn.")
-        .wait()
-        .expect("failed to wait for command");
+        .spawn().unwrap()
+        .wait().unwrap();
 }
