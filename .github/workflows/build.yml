@@ -28,9 +28,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Setup Rust / Rustup
-        run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-        shell: bash
+      # Github Action Images already contains rust, rustup, ..
+      # - name: Setup Rust / Rustup
+      #   run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+      #   shell: bash
 
       - name: Run Tests
         run: cargo test
