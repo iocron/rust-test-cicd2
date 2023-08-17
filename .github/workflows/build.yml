@@ -51,8 +51,8 @@ jobs:
           # rustup toolchain install stable-${{ matrix.job.target }}
           # rustup target add stable-${{ matrix.job.target }}
 
-          rustup target add --toolchain stable ${{ matrix.job.target }}
-          rustup toolchain install --force-non-host stable
+          # rustup target add --toolchain stable ${{ matrix.job.target }}
+          # rustup toolchain install --force-non-host stable
 
       - name: Build Rust Binaries
         run: cargo build --release --target=${{ matrix.job.target }}
