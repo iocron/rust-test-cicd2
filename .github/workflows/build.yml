@@ -75,7 +75,7 @@ jobs:
           RUNNER_ARCH_LC="$(echo "$RUNNER_ARCH" | perl -ne 'print lc')"
 
           APP_NAME="rust-string-replacer"
-          APP_NAME_SUFFIX="$(if [[ "$RUNNER_OS_LC" == "windows" ]]; then echo '.exe'; fi)"
+          APP_NAME_SUFFIX="$(if [[ "$RUNNER_OS_LC" == "windows" ]]; then echo '.exe'; elif [[ "${{ matrix.job.target }}" == *"wasm"* ]]; then echo '.wasm'; fi)"
           
           mkdir artifacts
           cp "target/${{ matrix.job.target }}/release/${APP_NAME}${APP_NAME_SUFFIX}" "artifacts/$APP_NAME-${{ matrix.job.exe }}"
