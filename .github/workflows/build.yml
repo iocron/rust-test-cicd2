@@ -43,11 +43,10 @@ jobs:
         # run: cargo install cross
 
       - name: Run Build 
-        if: contains(${{ matrix.job.target }}, 'x86') || contains(${{ matrix.job.target }}, 'aarch64-apple-darwin')
         run: |
           if [[ "${{ matrix.job.target }}" == *"x86"* || "${{ matrix.job.target }}" == "aarch64-apple-darwin" ]]; then
             ## CARGO BUILD
-            ## rustup self update
+            # rustup self update
             rustup target add --toolchain stable ${{ matrix.job.target }}
             rustup toolchain install --force-non-host stable
             cargo build --release --locked --target=${{ matrix.job.target }}
