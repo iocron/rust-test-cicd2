@@ -83,6 +83,7 @@ jobs:
           # See also: https://github.blog/2022-05-09-supercharging-github-actions-with-job-summaries/
           echo '### Hello world! 🚀' >> $GITHUB_STEP_SUMMARY
           echo "copy $SOURCE_PATH to $TARGET_PATH" >> $GITHUB_STEP_SUMMARY
+          echo "ABC123"
 
           cp "$SOURCE_PATH" "$TARGET_PATH"
         shell: bash
