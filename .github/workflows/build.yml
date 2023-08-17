@@ -18,13 +18,13 @@ jobs:
         job: 
           # GitHub Actions Runner Images: https://github.com/actions/runner-images
           # (see also: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#choosing-github-hosted-runners)
-          - { target: x86_64-unknown-linux-musl,  exe: x64-linux,     os: ubuntu-latest,  build_type: cargo }
-          - { target: aarch64-unknown-linux-gnu,  exe: aarch64-linux, os: ubuntu-latest,  build_type: cross }
-          - { target: x86_64-pc-windows-msvc,     exe: x64.exe,       os: windows-latest, build_type: cargo }
-          - { target: aarch64-pc-windows-msvc,    exe: aarch64.exe,   os: windows-latest, build_type: cargo }
-          - { target: x86_64-apple-darwin,        exe: x64-macos,     os: macos-latest,   build_type: cargo }
-          - { target: aarch64-apple-darwin,       exe: aarch64-macos, os: macos-latest,   build_type: cargo } 
-          - { target: wasm32-wasi,                exe: wasi.wasm,     os: ubuntu-latest,  build_type: cargo }
+          - { target: x86_64-unknown-linux-musl, os: ubuntu-latest,  file_suffix: x64-linux,     file_ext: "",      build_type: cargo }
+          - { target: aarch64-unknown-linux-gnu, os: ubuntu-latest,  file_suffix: aarch64-linux, file_ext: "",      build_type: cross }
+          - { target: x86_64-pc-windows-msvc,    os: windows-latest, file_suffix: x64,           file_ext: ".exe",   build_type: cargo }
+          - { target: aarch64-pc-windows-msvc,   os: windows-latest, file_suffix: aarch64,       file_ext: ".exe",   build_type: cargo }
+          - { target: x86_64-apple-darwin,       os: macos-latest,   file_suffix: x64-macos,     file_ext: "",      build_type: cargo }
+          - { target: aarch64-apple-darwin,      os: macos-latest,   file_suffix: aarch64-macos, file_ext: "",      build_type: cargo } 
+          - { target: wasm32-wasi,               os: ubuntu-latest,  file_suffix: wasi,          file_ext: ".wasm",  build_type: cargo }
     runs-on: ${{ matrix.job.os }}
     steps:
       - name: Checkout Repository
@@ -74,11 +74,11 @@ jobs:
           RUNNER_OS_LC="$(echo "$RUNNER_OS" | perl -ne 'print lc')"
           RUNNER_ARCH_LC="$(echo "$RUNNER_ARCH" | perl -ne 'print lc')"
 
-          APP_NAME="rust-string-replacer"
-          APP_NAME_SUFFIX="$(if [[ "$RUNNER_OS_LC" == "windows" ]]; then echo '.exe'; elif [[ "${{ matrix.job.target }}" == *"wasm"* ]]; then echo '.wasm'; fi)"
+          # BIN_NAME="my-cargo-package-name${{ matrix.job.file_ext }}
+          BIN_NAME="$(grep -E '^name\\s?=' Cargo.toml | head -1 | sed -E 's/(name\\s?=\\s?)"(.*)"/\2/g')${{ matrix.job.file_ext }}"
           
           mkdir artifacts
-          cp "target/${{ matrix.job.target }}/release/${APP_NAME}${APP_NAME_SUFFIX}" "artifacts/$APP_NAME-${{ matrix.job.exe }}"
+          cp "target/${{ matrix.job.target }}/release/$BIN_NAME" "artifacts/$BIN_NAME"
         shell: bash
 
       - name: Upload Builds
