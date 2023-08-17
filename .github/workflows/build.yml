@@ -58,7 +58,7 @@ jobs:
         if: ${{ matrix.job.target }} == "aarch64-unknown-linux-gnu"
         run: | 
           sudo apt install build-essential
-          # sudo apt install clang
+          sudo apt install clang
 
       - name: Build Rust Binaries
         run: cargo build --release --target=${{ matrix.job.target }}
