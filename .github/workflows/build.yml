@@ -44,7 +44,7 @@ jobs:
 
       - name: Run Build 
         run: |
-          if [[ "${{ matrix.job.target }}" == *"x86"* || "${{ matrix.job.target }}" == "aarch64-apple-darwin" ]]; then
+          if [[ "${{ matrix.job.target }}" == *"apple"* || "${{ matrix.job.target }}" == *"x86_64-unknown-linux"* ]]; then
             ## CARGO BUILD
             # rustup self update
             rustup target add --toolchain stable ${{ matrix.job.target }}
@@ -52,7 +52,7 @@ jobs:
             cargo build --release --locked --target=${{ matrix.job.target }}
           else
             ## CROSS BUILD
-            ## (for problematic targets or fallbacks, mainly arm/arch)
+            ## (for problematic targets or fallbacks, mainly for arm/arch/windows)
             cargo install cross
             cross build --release --locked --target=${{ matrix.job.target }}
           fi
