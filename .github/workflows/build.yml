@@ -19,11 +19,11 @@ jobs:
           # GitHub Actions Runner Images: https://github.com/actions/runner-images
           # (see also: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#choosing-github-hosted-runners)
           # - { target: x86_64-unknown-linux-musl, exe: amd64-linux, os: ubuntu-latest }
-          - { target: aarch64-unknown-linux-gnu, exe: aarch64-linux, os: ubuntu-latest }
+          # - { target: aarch64-unknown-linux-gnu, exe: aarch64-linux, os: ubuntu-latest }
           # - { target: armv7-unknown-linux-musleabi, exe: armv7-linux, os: ubuntu-latest }
           # - { target: x86_64-pc-windows-msvc, exe: windows.exe, os: windows-latest }
-          # - { target: x86_64-apple-darwin, exe: amd64-macos, os: macos-latest }
-          # - { target: aarch64-apple-darwin, exe: aarch64-macos, os: macos-latest } # TODO: Not working
+          - { target: x86_64-apple-darwin, exe: amd64-macos, os: macos-latest }
+          - { target: aarch64-apple-darwin, exe: aarch64-macos, os: macos-latest } # TODO: Not working
           # - { target: wasm32-wasi, exe: wasi.wasm, os: ubuntu-latest }
     runs-on: ${{ matrix.job.os }}
     steps:
@@ -53,11 +53,6 @@ jobs:
 
           rustup target add --toolchain stable ${{ matrix.job.target }}
           rustup toolchain install --force-non-host stable
-
-      - name: Aarch64 Linux Workaround
-        if: ${{ matrix.job.target }} == "aarch64-unknown-linux-gnu"
-        run: | 
-          sudo apt install gcc
 
       - name: Build Rust Binaries
         run: cargo build --release --target=${{ matrix.job.target }}
