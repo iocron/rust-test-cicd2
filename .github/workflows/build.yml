@@ -83,7 +83,8 @@ jobs:
           # RUNNER_OS_LC="$(echo "$RUNNER_OS" | perl -ne 'print lc')"
           # RUNNER_ARCH_LC="$(echo "$RUNNER_ARCH" | perl -ne 'print lc')"
 
-          PACKAGE_NAME="$(grep -E '^name\s?=' Cargo.toml | head -1 | sed -E 's/(name\s?=\s?)"(.*)".*$/\2/g')"
+          # TODO (OSX Bug): PACKAGE_NAME="$(grep -E '^name\s?=' Cargo.toml | head -1 | sed -E 's/(name\s?=\s?)"(.*)".*$/\2/g')"
+          PACKAGE_NAME="rust-string-replacer"
           SOURCE_PATH="target/${{ matrix.job.target }}/release/${PACKAGE_NAME}${{ matrix.job.file_ext }}"
           TARGET_PATH="artifacts/${PACKAGE_NAME}-${{ matrix.job.file_suffix }}${{ matrix.job.file_ext }}"
 
