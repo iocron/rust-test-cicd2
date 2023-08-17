@@ -18,13 +18,13 @@ jobs:
         job: 
           # GitHub Actions Runner Images: https://github.com/actions/runner-images
           # (see also: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#choosing-github-hosted-runners)
-          # - { target: x86_64-unknown-linux-musl, exe: x64-linux, os: ubuntu-latest, build_type: cargo }
-          # - { target: aarch64-unknown-linux-gnu, exe: aarch64-linux, os: ubuntu-latest, build_type: cross }
-          # - { target: x86_64-pc-windows-msvc, exe: x64.exe, os: windows-latest, build_type: cargo }
-          # - { target: aarch64-pc-windows-msvc, exe: aarch64.exe, os: windows-latest, build_type: cargo }
-          # - { target: x86_64-apple-darwin, exe: x64-macos, os: macos-latest, build_type: cargo }
-          # - { target: aarch64-apple-darwin, exe: aarch64-macos, os: macos-latest, build_type: cargo } 
-          - { target: wasm32-wasi, exe: wasi.wasm, os: ubuntu-latest, build_type: cargo }
+          - { target: x86_64-unknown-linux-musl,  exe: x64-linux,     os: ubuntu-latest,  build_type: cargo }
+          - { target: aarch64-unknown-linux-gnu,  exe: aarch64-linux, os: ubuntu-latest,  build_type: cross }
+          - { target: x86_64-pc-windows-msvc,     exe: x64.exe,       os: windows-latest, build_type: cargo }
+          - { target: aarch64-pc-windows-msvc,    exe: aarch64.exe,   os: windows-latest, build_type: cargo }
+          - { target: x86_64-apple-darwin,        exe: x64-macos,     os: macos-latest,   build_type: cargo }
+          - { target: aarch64-apple-darwin,       exe: aarch64-macos, os: macos-latest,   build_type: cargo } 
+          - { target: wasm32-wasi,                exe: wasi.wasm,     os: ubuntu-latest,  build_type: cargo }
     runs-on: ${{ matrix.job.os }}
     steps:
       - name: Checkout Repository
