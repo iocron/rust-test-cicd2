@@ -54,13 +54,13 @@ jobs:
           rustup target add --toolchain stable ${{ matrix.job.target }}
           rustup toolchain install --force-non-host stable
 
-      - name: Aarch64 Linux Workaround
-        if: ${{ matrix.job.target }} == "aarch64-unknown-linux-musl"
-        run: | 
-          rustup target add --toolchain stable aarch64-linux-gnu-gcc
+      # - name: Aarch64 Linux Workaround
+      #   if: ${{ matrix.job.target }} == "aarch64-unknown-linux-musl"
+      #   run: | 
+      #     apt install build-essential
 
       - name: Build Rust Binaries
-        run: cargo build --release --locked --target=${{ matrix.job.target }}
+        run: cargo build --release --target=${{ matrix.job.target }}
 
       # - name: Cross Compile for Linux
       #   if: startsWith(matrix.os, 'ubuntu')
