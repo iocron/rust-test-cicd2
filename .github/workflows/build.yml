@@ -44,7 +44,7 @@ jobs:
 
       - name: Run Build 
         run: |
-          if [[ "${{ matrix.job.target }}" == *"apple"* || "${{ matrix.job.target }}" == *"x86_64-unknown-linux"* ]]; then
+          if [[ "${{ matrix.job.target }}" == *"x86"* || "${{ matrix.job.target }}" == *"apple"* ]]; then
             ## CARGO BUILD
             # rustup self update
             rustup target add --toolchain stable ${{ matrix.job.target }}
@@ -56,6 +56,7 @@ jobs:
             cargo install cross
             cross build --release --locked --target=${{ matrix.job.target }}
           fi
+        shell: bash
           
       # - name: Setup Rust Dependencies
       #   run: |
