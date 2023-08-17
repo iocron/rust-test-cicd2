@@ -38,21 +38,22 @@ jobs:
       # - name: Run Tests
       #   run: cargo test
 
-      # - name: Install Crossbuild
+      - name: Install Crossbuild
+        run: cargo install cross --git https://github.com/cross-rs/cross
         # run: cargo install cross
-        # run: cargo install cross --git https://github.com/cross-rs/cross
 
-      # - name: Run Crossbuild
+      - name: Run Crossbuild
+        run: cross build --release --target=${{ matrix.job.target }}
         # run: cross build --release --locked --target=${{ matrix.job.target }}
 
-      - name: Setup Rust Dependencies
-        run: |
-          # rustup self update
-          rustup target add --toolchain stable ${{ matrix.job.target }}
-          rustup toolchain install --force-non-host stable
+      # - name: Setup Rust Dependencies
+      #   run: |
+      #     # rustup self update
+      #     rustup target add --toolchain stable ${{ matrix.job.target }}
+      #     rustup toolchain install --force-non-host stable
 
-      - name: Build Rust Binaries
-        run: cargo build --release --target=${{ matrix.job.target }}
+      # - name: Build Rust Binaries
+      #   run: cargo build --release --target=${{ matrix.job.target }}
 
       # - name: Cross Compile for Linux
       #   if: startsWith(matrix.os, 'ubuntu')
