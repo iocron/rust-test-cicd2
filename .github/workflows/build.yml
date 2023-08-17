@@ -76,10 +76,11 @@ jobs:
 
           PACKAGE_NAME="$(grep -E '^name\s?=' Cargo.toml | head -1 | sed -E 's/(name\s?=\s?)"(.*)"/\2/g')"
           SOURCE_PATH="target/${{ matrix.job.target }}/release/${PACKAGE_NAME}${{ matrix.job.file_ext }}"
-          TARGET_PATH="artifacts/${PACKAGE_NAME}${{ matrix.job.file_suffix }}${{ matrix.job.file_ext }}"
+          TARGET_PATH="artifacts/${PACKAGE_NAME}-${{ matrix.job.file_suffix }}${{ matrix.job.file_ext }}"
 
           mkdir artifacts
-          echo copy_from_source_to_target="copy $SOURCE_PATH to $TARGET_PATH" >> $GITHUB_OUTPUT
+          # echo copy_from_source_to_target="copy $SOURCE_PATH to $TARGET_PATH" >> $GITHUB_STEP_SUMMARY
+          echo "SELECTED_COLOR=green" >> $GITHUB_OUTPUT
           cp "$SOURCE_PATH" "$TARGET_PATH"
         shell: bash
 
