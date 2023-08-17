@@ -18,12 +18,12 @@ jobs:
         job: 
           # GitHub Actions Runner Images: https://github.com/actions/runner-images
           # (see also: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#choosing-github-hosted-runners)
-          - { target: x86_64-unknown-linux-musl, os: ubuntu-latest,  file_suffix: x64-linux,     file_ext: "",      build_type: cargo }
-          - { target: aarch64-unknown-linux-gnu, os: ubuntu-latest,  file_suffix: aarch64-linux, file_ext: "",      build_type: cross }
-          - { target: x86_64-pc-windows-msvc,    os: windows-latest, file_suffix: x64,           file_ext: ".exe",   build_type: cargo }
-          - { target: aarch64-pc-windows-msvc,   os: windows-latest, file_suffix: aarch64,       file_ext: ".exe",   build_type: cargo }
-          - { target: x86_64-apple-darwin,       os: macos-latest,   file_suffix: x64-macos,     file_ext: "",      build_type: cargo }
-          - { target: aarch64-apple-darwin,      os: macos-latest,   file_suffix: aarch64-macos, file_ext: "",      build_type: cargo } 
+          # - { target: x86_64-unknown-linux-musl, os: ubuntu-latest,  file_suffix: x64-linux,     file_ext: "",      build_type: cargo }
+          # - { target: aarch64-unknown-linux-gnu, os: ubuntu-latest,  file_suffix: aarch64-linux, file_ext: "",      build_type: cross }
+          # - { target: x86_64-pc-windows-msvc,    os: windows-latest, file_suffix: x64,           file_ext: ".exe",   build_type: cargo }
+          # - { target: aarch64-pc-windows-msvc,   os: windows-latest, file_suffix: aarch64,       file_ext: ".exe",   build_type: cargo }
+          # - { target: x86_64-apple-darwin,       os: macos-latest,   file_suffix: x64-macos,     file_ext: "",      build_type: cargo }
+          # - { target: aarch64-apple-darwin,      os: macos-latest,   file_suffix: aarch64-macos, file_ext: "",      build_type: cargo } 
           - { target: wasm32-wasi,               os: ubuntu-latest,  file_suffix: wasi,          file_ext: ".wasm",  build_type: cargo }
     runs-on: ${{ matrix.job.os }}
     steps:
@@ -79,7 +79,7 @@ jobs:
           TARGET_PATH="artifacts/${PACKAGE_NAME}${{ matrix.job.file_suffix }}${{ matrix.job.file_ext }}"
 
           mkdir artifacts
-          echo "copy $SOURCE_PATH to $TARGET_PATH" >> $GITHUB_OUTPUT
+          echo copy_from_source_to_target="copy $SOURCE_PATH to $TARGET_PATH" >> $GITHUB_OUTPUT
           cp "$SOURCE_PATH" "$TARGET_PATH"
         shell: bash
 
