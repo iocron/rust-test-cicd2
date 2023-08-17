@@ -71,14 +71,16 @@ jobs:
 
       - name: Archive Builds
         run: |
-          RUNNER_OS_LC="$(echo "$RUNNER_OS" | perl -ne 'print lc')"
-          RUNNER_ARCH_LC="$(echo "$RUNNER_ARCH" | perl -ne 'print lc')"
+          # RUNNER_OS_LC="$(echo "$RUNNER_OS" | perl -ne 'print lc')"
+          # RUNNER_ARCH_LC="$(echo "$RUNNER_ARCH" | perl -ne 'print lc')"
 
-          # BIN_NAME="my-cargo-package-name${{ matrix.job.file_ext }}
-          BIN_NAME="$(grep -E '^name\\s?=' Cargo.toml | head -1 | sed -E 's/(name\\s?=\\s?)"(.*)"/\2/g')${{ matrix.job.file_ext }}"
-          
+          PACKAGE_NAME="$(grep -E '^name\\s?=' Cargo.toml | head -1 | sed -E 's/(name\\s?=\\s?)"(.*)"/\2/g')"
+          SOURCE_NAME="${PACKAGE_NAME}${{ matrix.job.file_ext }}"
+          TARGET_NAME="${PACKAGE_NAME}${{ matrix.job.file_suffix }}${{ matrix.job.file_ext }}"
+
           mkdir artifacts
-          cp "target/${{ matrix.job.target }}/release/$BIN_NAME" "artifacts/$BIN_NAME"
+          echo "copy target/${{ matrix.job.target }}/release/$SOURCE_NAME" to "artifacts/$TARGET_NAME" >> $GITHUB_OUTPUT
+          cp "target/${{ matrix.job.target }}/release/$SOURCE_NAME" "artifacts/$TARGET_NAME"
         shell: bash
 
       - name: Upload Builds
