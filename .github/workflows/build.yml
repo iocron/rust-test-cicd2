@@ -58,9 +58,12 @@ jobs:
             exit 1
           fi
 
-          # See also: https://github.blog/2022-05-09-supercharging-github-actions-with-job-summaries/
+          # (https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/organizing-information-with-tables)
+          # (https://github.blog/2022-05-09-supercharging-github-actions-with-job-summaries/)
           # echo "## Run Build" >> $GITHUB_STEP_SUMMARY
-          echo "Build successful: ${{ matrix.job.build_type }}" >> $GITHUB_STEP_SUMMARY
+          echo "|          Target          |           OS         |           Build Type         |" >> $GITHUB_STEP_SUMMARY
+          echo "| ------------------------ | -------------------- | ---------------------------- |" >> $GITHUB_STEP_SUMMARY
+          echo "| ${{ matrix.job.target }} | ${{ matrix.job.os }} | ${{ matrix.job.build_type }} |" >> $GITHUB_STEP_SUMMARY
         shell: bash
           
       # - name: Cross Compile for Linux
