@@ -36,7 +36,9 @@ jobs:
       #   shell: bash
 
       - name: Run Tests
-        run: cargo test
+        run: | 
+          cargo test
+          echo "All tests ran successfully." >> $GITHUB_STEP_SUMMARY
 
       - name: Run Build 
         run: |
@@ -55,6 +57,10 @@ jobs:
             echo "ERROR: build_type \"${{ matrix.job.build_type }}\" failed or not defined."
             exit 1
           fi
+
+          # See also: https://github.blog/2022-05-09-supercharging-github-actions-with-job-summaries/
+          # echo "## Run Build" >> $GITHUB_STEP_SUMMARY
+          echo "Build successful: ${{ matrix.job.build_type }}" >> $GITHUB_STEP_SUMMARY
         shell: bash
           
       # - name: Cross Compile for Linux
@@ -80,11 +86,7 @@ jobs:
 
           mkdir artifacts
 
-          # See also: https://github.blog/2022-05-09-supercharging-github-actions-with-job-summaries/
-          echo '### Hello world! 🚀' >> $GITHUB_STEP_SUMMARY
-          echo "copy $SOURCE_PATH to $TARGET_PATH" >> $GITHUB_STEP_SUMMARY
-          echo "ABC123"
-
+          echo "cp $SOURCE_PATH to $TARGET_PATH"
           cp "$SOURCE_PATH" "$TARGET_PATH"
         shell: bash
 
