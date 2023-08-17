@@ -57,8 +57,7 @@ jobs:
       - name: Aarch64 Linux Workaround
         if: ${{ matrix.job.target }} == "aarch64-unknown-linux-gnu"
         run: | 
-          sudo apt install build-essential
-          sudo apt install clang
+          sudo apt install gcc
 
       - name: Build Rust Binaries
         run: cargo build --release --target=${{ matrix.job.target }}
