@@ -24,7 +24,7 @@ jobs:
           - { target: aarch64-pc-windows-msvc, exe: aarch64.exe, os: windows-latest }
           - { target: x86_64-apple-darwin, exe: x64-macos, os: macos-latest }
           - { target: aarch64-apple-darwin, exe: aarch64-macos, os: macos-latest } 
-          # - { target: wasm32-wasi, exe: wasi.wasm, os: ubuntu-latest }
+          - { target: wasm32-wasi, exe: wasi.wasm, os: ubuntu-latest }
     runs-on: ${{ matrix.job.os }}
     steps:
       - name: Checkout Repository
@@ -48,7 +48,7 @@ jobs:
             cargo build --release --locked --target=${{ matrix.job.target }}
           else
             ## CROSS BUILD
-            ## (for problematic targets or fallbacks, mainly for arm/arch/windows)
+            ## (for problematic targets or fallbacks, mainly for arm/arch)
             cargo install cross # --git https://github.com/cross-rs/cross
             cross build --release --locked --target=${{ matrix.job.target }}
           fi
