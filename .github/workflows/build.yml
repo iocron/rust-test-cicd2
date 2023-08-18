@@ -25,6 +25,7 @@ jobs:
           - { target: x86_64-apple-darwin,       os: macos-latest,   file_suffix: x64-macos,     file_ext: "",      build_type: cargo }
           - { target: aarch64-apple-darwin,      os: macos-latest,   file_suffix: aarch64-macos, file_ext: "",      build_type: cargo } 
           - { target: wasm32-wasi,               os: ubuntu-latest,  file_suffix: wasi,          file_ext: ".wasm", build_type: cargo }
+          - { target: wasm32-unknown-unknown,    os: ubuntu-latest,  file_suffix: wasmer,        file_ext: ".wasm", build_type: cargo }
     runs-on: ${{ matrix.job.os }}
     steps:
       - name: Checkout Repository
