@@ -24,6 +24,13 @@ struct Args {
 
     #[arg(short, long, help = "Enable verbose debugging")]
     verbose: bool,
+
+    #[arg(
+        short,
+        long,
+        help = "Disable \"file_or_path\" and use a string input instead."
+    )]
+    no_file_or_path: bool,
 }
 
 fn main() {
@@ -55,19 +62,18 @@ fn main() {
                     }
                 };
 
-                let file_content_replaced: String = match args.regex {
-                    true => {
-                        let re = Regex::new(&args.string_search).unwrap();
-                        re.replace_all(&file_content, &args.string_replace)
-                            .to_string()
-                        // re.replace_all(&file_content, format!(r#"{}"#, &args.string_replace))
-                    }
-                    false => file_content.replace(&args.string_search, &args.string_replace),
-                };
+                let file_content_replaced = string_replace(
+                    &args.string_search,
+                    &args.string_replace,
+                    &file_content,
+                    args.regex,
+                );
+                // let file_content_replaced =
+                // string_replace("".to_string(), "".to_string(), "".to_string(), false);
 
                 if args.verbose {
-                    println!("File {:?} content bef: {:?}", &path, file_content);
-                    println!("File {:?} content aft: {:?}", &path, file_content_replaced);
+                    println!("File {:?} content bef: {:?}", &path, &file_content);
+                    println!("File {:?} content aft: {:?}", &path, &file_content_replaced);
                 }
 
                 if file_content != file_content_replaced {
@@ -89,5 +95,19 @@ fn main() {
 
     if file_modified_count == 0 {
         println!("No files/strings have been modified");
+    }
+}
+
+fn string_replace(
+    string_search: &str,
+    string_replace: &str,
+    string_content: &str,
+    regex: bool,
+) -> String {
+    if regex {
+        let re = Regex::new(string_search).unwrap();
+        re.replace_all(string_content, string_replace).to_string()
+    } else {
+        string_content.replace(string_search, string_replace)
     }
 }
