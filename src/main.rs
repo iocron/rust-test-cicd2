@@ -65,6 +65,14 @@ fn main() {
         for file in glob(&args.file_or_path).expect("Failed to read glob pattern") {
             match file {
                 Ok(path) => {
+                    // TODO: Not working for some reason, because if the glob is not found, the glob is not even triggered
+                    // if !path.exists() {
+                    //     panic_red!(
+                    //         "The argument value is not a valid file or path: \n\"{}\"\n",
+                    //         args.file_or_path
+                    //     );
+                    // }
+
                     let file_content = match fs::read_to_string(&path) {
                         Ok(content) => content,
                         Err(err) => {
