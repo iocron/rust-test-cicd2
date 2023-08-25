@@ -4,6 +4,7 @@
 ## Docs
 - https://nodejs.dev/en/learn/nodejs-with-webassembly/
 - https://rustwasm.github.io/docs/wasm-pack/quickstart.html
+- https://www.youtube.com/watch?v=nW71Mlbmxt8
 
 ## Notice
 For a existing rust package/project use the following steps to publish a rust-node npm package (otherwise create a new project by using `wasm-pack new my-new-rust-wasm-project`): 
