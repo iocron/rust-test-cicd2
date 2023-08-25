@@ -58,8 +58,9 @@ fn main() {
                 let file_content_replaced: String = match args.regex {
                     true => {
                         let re = Regex::new(&args.string_search).unwrap();
-                        re.replace_all(&file_content, r#"&${args.string_replace}"#)
+                        re.replace_all(&file_content, &args.string_replace)
                             .to_string()
+                        // re.replace_all(&file_content, format!(r#"{}"#, &args.string_replace))
                     }
                     false => file_content.replace(&args.string_search, &args.string_replace),
                 };

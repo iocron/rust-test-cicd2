@@ -12,7 +12,7 @@ fn create_test_files() {
 
     fs::write(
         files[0],
-        "UTI\nREPLACE_PENDINGabc\neorwpREPLACE_PENDINGei\nii",
+        "UTI\nREPLACE_PENDING=abc\neorwpREPLACE_PENDINGei\nii",
     )
     .expect("File ./tests/test1.txt should have been created.");
     fs::write(files[1], "456").expect("File ./tests/test2.txt should have been created.");
@@ -44,8 +44,8 @@ fn check_if_arg_regex_is_working() {
 
     Command::new("cargo")
         .arg("run")
-        .arg("^REPLACE_PENDING.*")
-        .arg("REPLACE_FINISHED")
+        .arg("(^|\\n)(REPLACE_PENDING)(=.*)")
+        .arg("$1 - REPLACE_FINISHED - $3")
         .arg("./tests/example_files/test1.txt")
         .arg("--regex")
         .arg("--verbose")
