@@ -16,10 +16,10 @@ struct Args {
     #[arg()] // Required
     file_or_path: String,
 
-    #[arg(short, long, help = "Enable dry run")]
+    #[arg(short, long, help = "Enable dry run (simulate/don't write files)")]
     dry_run: bool,
 
-    #[arg(short, long, help = "Enable regex")]
+    #[arg(short, long, help = "Enable regex for string search/replacement")]
     regex: bool,
 
     #[arg(short, long, help = "Enable verbose debugging")]
