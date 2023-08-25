@@ -22,7 +22,7 @@ macro_rules! println_yellow {
     });
 }
 
-/// Same as println! but with red color output
+/// Same as eprintln! but with red color output
 #[macro_export]
 macro_rules! eprintln_red {
     ($($arg:tt)*) => ({
@@ -30,7 +30,7 @@ macro_rules! eprintln_red {
     });
 }
 
-/// Same as println! but with green color output
+/// Same as eprintln! but with green color output
 #[macro_export]
 macro_rules! eprintln_green {
     ($($arg:tt)*) => ({
@@ -38,7 +38,7 @@ macro_rules! eprintln_green {
     });
 }
 
-/// Same as println! but with yellow color output
+/// Same as eprintln! but with yellow color output
 #[macro_export]
 macro_rules! eprintln_yellow {
     ($($arg:tt)*) => ({
@@ -46,7 +46,7 @@ macro_rules! eprintln_yellow {
     });
 }
 
-/// Same as println! but with red color output
+/// Same as panic! but with red color output
 #[macro_export]
 macro_rules! panic_red {
     ($($arg:tt)*) => ({
@@ -54,7 +54,7 @@ macro_rules! panic_red {
     });
 }
 
-/// Same as println! but with green color output
+/// Same as panic! but with green color output
 #[macro_export]
 macro_rules! panic_green {
     ($($arg:tt)*) => ({
@@ -62,7 +62,7 @@ macro_rules! panic_green {
     });
 }
 
-/// Same as println! but with yellow color output
+/// Same as panic! but with yellow color output
 #[macro_export]
 macro_rules! panic_yellow {
     ($($arg:tt)*) => ({
