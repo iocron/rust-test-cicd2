@@ -30,6 +30,21 @@ fn count_occurrences(text_input: &str, search_string: &str) -> usize {
 
 #[test]
 #[serial]
+fn check_if_arg_dry_run_is_working() {
+    create_test_files();
+
+     Command::new("cargo")
+        .arg("run")
+        .arg("REPLACE_PENDING")
+        .arg("REPLACE_FINISHED")
+        .arg("./tests/example_files/**/*.txt")
+        .arg("--dry-run")
+        .spawn().unwrap()
+        .wait().unwrap();   
+}
+
+#[test]
+#[serial]
 fn check_if_replace_string_works_in_single_file() {
     create_test_files();
 
