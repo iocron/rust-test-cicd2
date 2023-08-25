@@ -1,6 +1,6 @@
 use clap::Parser; // use clap::*;
 use glob::glob;
-// use regex::Regex;
+use regex::Regex;
 use rust_string_replacer::*;
 use std::fs;
 
@@ -16,8 +16,14 @@ struct Args {
     #[arg()] // Required
     file_or_path: String,
 
-    #[arg(short, long, help = "Enable dry run")] // Optional
+    #[arg(short, long, help = "Enable dry run")]
     dry_run: bool,
+
+    #[arg(short, long, help = "Enable regex")]
+    regex: bool,
+
+    #[arg(short, long, help = "Enable verbose debugging")]
+    verbose: bool,
 }
 
 fn main() {
@@ -49,11 +55,19 @@ fn main() {
                     }
                 };
 
-                let file_content_replaced =
-                    file_content.replace(&args.string_search, &args.string_replace);
+                let file_content_replaced: String = match args.regex {
+                    true => {
+                        let re = Regex::new(&args.string_search).unwrap();
+                        re.replace_all(&file_content, r#"&${args.string_replace}"#)
+                            .to_string()
+                    }
+                    false => file_content.replace(&args.string_search, &args.string_replace),
+                };
 
-                // println!("File {:?} content bef: {:?}", &path, file_content);
-                // println!("File {:?} content aft: {:?}", &path, file_content_replaced);
+                if args.verbose {
+                    println!("File {:?} content bef: {:?}", &path, file_content);
+                    println!("File {:?} content aft: {:?}", &path, file_content_replaced);
+                }
 
                 if file_content != file_content_replaced {
                     if args.dry_run {
@@ -67,7 +81,7 @@ fn main() {
 
                     file_modified_count += 1;
                 }
-           }
+            }
             Err(err) => println!("{:?}", err),
         };
     }
