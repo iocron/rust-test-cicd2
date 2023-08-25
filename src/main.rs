@@ -65,13 +65,6 @@ fn main() {
         for file in glob(&args.file_or_path).expect("Failed to read glob pattern") {
             match file {
                 Ok(path) => {
-                    if !path.exists() {
-                        panic_red!(
-                            "The argument value is not a valid file or path: \n\"{}\"\n",
-                            args.file_or_path
-                        );
-                    }
-
                     let file_content = match fs::read_to_string(&path) {
                         Ok(content) => content,
                         Err(err) => {
@@ -106,7 +99,7 @@ fn main() {
                         file_modified_count += 1;
                     }
                 }
-                Err(err) => println!("{:?}", err),
+                Err(err) => println_red!("{:?}", err),
             };
 
             if file_modified_count == 0 {
