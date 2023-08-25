@@ -39,6 +39,23 @@ fn count_occurrences(text_input: &str, search_string: &str) -> usize {
 
 #[test]
 #[serial]
+fn check_if_arg_no_file_or_path_is_working() {
+    create_test_files();
+
+    Command::new("cargo")
+        .arg("run")
+        .arg("REPLACE_PENDING")
+        .arg("REPLACE_FINISHED")
+        .arg("This is some regular text REPLACE_PENDING instead of a file.")
+        .arg("--no-file-or-path")
+        .spawn()
+        .unwrap()
+        .wait()
+        .unwrap();
+}
+
+#[test]
+#[serial]
 fn check_if_arg_regex_is_working() {
     create_test_files();
 
