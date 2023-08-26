@@ -14,50 +14,47 @@ struct Args {
     #[arg()] // Required
     string_replace: String,
 
-    #[arg()] // Required
-    file_or_path: String,
+    #[arg(help = "Add --string-input if you want to use a string instead of a file / path")]
+    // Required
+    file_or_path_or_string: String,
 
-    #[arg(short, long, help = "Enable dry run (simulate/don't write files)")]
+    #[arg(short, long, help = "Enable dry run (simulate / don't write files)")]
     dry_run: bool,
 
-    #[arg(short, long, help = "Enable regex for string search/replacement")]
+    #[arg(short, long, help = "Enable regex for string search / replacement")]
     regex: bool,
 
     #[arg(short, long, help = "Enable verbose debugging")]
     verbose: bool,
 
-    #[arg(
-        short,
-        long,
-        help = "Disable \"file_or_path\" and use a string input instead."
-    )]
-    no_file_or_path: bool,
+    #[arg(short, long, help = "Use a string input instead of a file / path")]
+    string_input: bool,
 }
 
 fn main() {
     let mut file_modified_count = 0;
     let args = Args::parse();
 
-    if args.file_or_path == "/" {
+    if args.file_or_path_or_string == "/" {
         panic_red!(
             "Error: Path \"/\" can be very unstable! Please consider choosing a more precise path."
         );
     }
 
-    if args.no_file_or_path {
+    if args.string_input {
         // Replace string in string input
         println_yellow!(
             "Replacing string \"{}\" with \"{}\" in string \"{}\"",
             &args.string_search,
             &args.string_replace,
-            &args.file_or_path
+            &args.file_or_path_or_string
         );
 
         // Replace a direct string input
         let text_content_replaced = string_replace(
             &args.string_search,
             &args.string_replace,
-            &args.file_or_path,
+            &args.file_or_path_or_string,
             args.regex,
         );
 
@@ -68,21 +65,21 @@ fn main() {
             "Replacing string \"{}\" with \"{}\" in path / files \"{}\"",
             &args.string_search,
             &args.string_replace,
-            &args.file_or_path
+            &args.file_or_path_or_string
         );
 
         // Check if path is a valid file or directory
-        let path_parent_without_glob = path_without_glob(&args.file_or_path);
+        let path_parent_without_glob = path_without_glob(&args.file_or_path_or_string);
         if !Path::new(&path_parent_without_glob).exists() {
             panic_red!(
                 "The argument value does not lead to a valid file or path: {}\n(path validation on: {})",
-                args.file_or_path,
+                args.file_or_path_or_string,
                 &path_parent_without_glob
             );
         }
 
         // Glob through files and replace strings
-        for file in glob(&args.file_or_path).expect("Failed to read glob pattern") {
+        for file in glob(&args.file_or_path_or_string).expect("Failed to read glob pattern") {
             match file {
                 Ok(path) => {
                     let file_content = match fs::read_to_string(&path) {
@@ -129,6 +126,7 @@ fn main() {
     }
 }
 
+// String replace with or without regex
 fn string_replace(
     string_search: &str,
     string_replace: &str,
