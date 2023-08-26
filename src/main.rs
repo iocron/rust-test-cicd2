@@ -44,16 +44,15 @@ fn main() {
         );
     }
 
-    if !args.no_file_or_path || (args.no_file_or_path && args.verbose) {
+    if args.no_file_or_path {
+        // Replace string in string input
         println_yellow!(
-            "Replacing string \"{}\" with \"{}\" in \"{}\"",
+            "Replacing string \"{}\" with \"{}\" in string \"{}\"",
             &args.string_search,
             &args.string_replace,
             &args.file_or_path
         );
-    }
 
-    if args.no_file_or_path {
         // Replace a direct string input
         let text_content_replaced = string_replace(
             &args.string_search,
@@ -64,6 +63,14 @@ fn main() {
 
         println!("{}", &text_content_replaced);
     } else {
+        // Replace strings in path / files
+        println_yellow!(
+            "Replacing string \"{}\" with \"{}\" in path / files \"{}\"",
+            &args.string_search,
+            &args.string_replace,
+            &args.file_or_path
+        );
+
         // Check if path is a valid file or directory
         let path_parent_without_glob = path_without_glob(&args.file_or_path);
         if !Path::new(&path_parent_without_glob).exists() {
