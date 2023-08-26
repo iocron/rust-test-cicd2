@@ -3,6 +3,7 @@ use glob::glob;
 use regex::Regex;
 use rust_string_replacer::*;
 use std::fs;
+use std::path::Path;
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
@@ -53,6 +54,7 @@ fn main() {
     }
 
     if args.no_file_or_path {
+        // Replace a direct string input
         let text_content_replaced = string_replace(
             &args.string_search,
             &args.string_replace,
@@ -62,17 +64,20 @@ fn main() {
 
         println!("{}", &text_content_replaced);
     } else {
+        // Check if path is a valid file or directory
+        let path_parent_without_glob = path_without_glob(&args.file_or_path);
+        if !Path::new(&path_parent_without_glob).exists() {
+            panic_red!(
+                "The argument value does not lead to a valid file or path: {}\n(path validation on: {})",
+                args.file_or_path,
+                &path_parent_without_glob
+            );
+        }
+
+        // Glob through files and replace strings
         for file in glob(&args.file_or_path).expect("Failed to read glob pattern") {
             match file {
                 Ok(path) => {
-                    // TODO: Not working for some reason, because if the glob is not found, the glob is not even triggered
-                    // if !path.exists() {
-                    //     panic_red!(
-                    //         "The argument value is not a valid file or path: \n\"{}\"\n",
-                    //         args.file_or_path
-                    //     );
-                    // }
-
                     let file_content = match fs::read_to_string(&path) {
                         Ok(content) => content,
                         Err(err) => {
@@ -129,4 +134,26 @@ fn string_replace(
     } else {
         string_content.replace(string_search, string_replace)
     }
+}
+
+// Returns: /root/home/**/*.txt => /root/home
+// Returns: /root/home/test.txt => /root/home/test.txt
+fn path_without_glob(path: &str) -> String {
+    let path_separator = std::path::MAIN_SEPARATOR_STR;
+    let split = path.split_terminator(path_separator);
+    let mut vec: Vec<&str> = vec![];
+
+    for s in split.clone() {
+        if !s.contains('*') {
+            vec.push(s);
+        }
+    }
+
+    let result = vec.join(path_separator);
+
+    // println!("path: {:?}", path);
+    // println!("split: {:?}", split);
+    // println!("result: {:?}", result);
+
+    result
 }
